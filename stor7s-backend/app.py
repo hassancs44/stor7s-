@@ -41,8 +41,9 @@ def uploaded_files(filename):
 # ==============================
 @app.post("/api/login")
 def login_check():
-    data = request.get_json()
-    name = data.get("name","").strip()
+    data = request.get_json(silent=True) or request.form
+    name = str(data.get("name","")).strip()
+
     df = load("users").fillna("")
 
     if "اسم_المستخدم" not in df.columns:
@@ -97,3 +98,4 @@ app.register_blueprint(admin_api, url_prefix="/api/admin")
 if __name__ == "__main__":
     print("🚀 STOR7S Backend Running: http://127.0.0.1:5000")
     app.run(debug=True, host="0.0.0.0", port=5000, use_reloader=False)
+
